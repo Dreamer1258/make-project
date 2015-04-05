@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if (( $# != 2 )); then
+	echo "Usage: make-project <type> <name>"
+	exit;
+fi
+
+if [ -e $2 ]; then
+	echo "Project $2 already exists"
+	exit;
+fi
+
+for i in /etc/make-project/source/* ; do
+	if [ -d "$i" ]; then
+		type=$(basename "$i")
+		if [ "$type" == "$1" ]; then
+			$(mkdir $2)
+			$(cp "/etc/make-project/source/$1/." "$2/" -R)
+			exit
+		fi
+	fi
+done
+
+echo "Project template for $1 not found!"
